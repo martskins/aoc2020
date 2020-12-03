@@ -1,7 +1,7 @@
 use crate::{io::read_lines, result::Result};
 
 #[derive(Debug)]
-struct Entry {
+pub struct Entry {
     num_left: usize,
     num_right: usize,
     ch: char,
@@ -40,46 +40,50 @@ impl From<String> for Entry {
     }
 }
 
-fn part_one(entries: &[Entry]) -> usize {
-    entries
-        .into_iter()
-        .filter_map(|c| if c.valid_part_one() { Some(c) } else { None })
-        .count()
-}
+pub struct Puzzle;
 
-fn part_two(entries: &[Entry]) -> usize {
-    entries
-        .into_iter()
-        .filter_map(|c| if c.valid_part_two() { Some(c) } else { None })
-        .count()
-}
+impl crate::PuzzleRunner for Puzzle {
+    const DAY: usize = 2;
+    type First = usize;
+    type Second = usize;
+    type Input = Vec<Entry>;
 
-fn parse_entries(filename: &str) -> Result<Vec<Entry>> {
-    let entries = read_lines(filename)?.into_iter().map(Into::into).collect();
-    Ok(entries)
-}
+    fn parse_input(&self, filename: &str) -> Result<Self::Input> {
+        let entries = read_lines(filename)?.into_iter().map(Into::into).collect();
+        Ok(entries)
+    }
 
-pub fn run() -> Result<()> {
-    let entries = parse_entries("./data/day2.txt")?;
-    println!("day two answers");
-    println!("    part one: {}", part_one(&entries));
-    println!("    part two: {}", part_two(&entries));
-    Ok(())
+    fn part_one(&self, entries: &Self::Input) -> Self::First {
+        entries
+            .into_iter()
+            .filter_map(|c| if c.valid_part_one() { Some(c) } else { None })
+            .count()
+    }
+
+    fn part_two(&self, entries: &Self::Input) -> Self::Second {
+        entries
+            .into_iter()
+            .filter_map(|c| if c.valid_part_two() { Some(c) } else { None })
+            .count()
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::PuzzleRunner;
 
     #[test]
     fn test_part_one() {
-        let entries = parse_entries("./data/day2_test.txt").unwrap();
-        assert_eq!(2, part_one(&entries));
+        let puzzle = Puzzle;
+        let entries = puzzle.test_input().unwrap();
+        assert_eq!(2, puzzle.part_one(&entries));
     }
 
     #[test]
     fn test_part_two() {
-        let entries = parse_entries("./data/day2_test.txt").unwrap();
-        assert_eq!(1, part_two(&entries));
+        let puzzle = Puzzle;
+        let entries = puzzle.test_input().unwrap();
+        assert_eq!(1, puzzle.part_two(&entries));
     }
 }
