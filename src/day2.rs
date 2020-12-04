@@ -8,20 +8,6 @@ pub struct Entry {
     password: String,
 }
 
-impl Entry {
-    fn valid_part_one(&self) -> bool {
-        let occurrences = self.password.matches(self.ch).count();
-        occurrences >= self.num_left && occurrences <= self.num_right
-    }
-
-    fn valid_part_two(&self) -> bool {
-        let chars: Vec<char> = self.password.chars().collect();
-        let first = chars.get(self.num_left - 1);
-        let second = chars.get(self.num_right - 1);
-        (first == Some(&self.ch) || second == Some(&self.ch)) && first != second
-    }
-}
-
 impl From<String> for Entry {
     fn from(input: String) -> Self {
         let mut split = input.split_whitespace();
@@ -56,14 +42,22 @@ impl crate::PuzzleRunner for Puzzle {
     fn part_one(&self, entries: &Self::Input) -> Self::First {
         entries
             .into_iter()
-            .filter_map(|c| if c.valid_part_one() { Some(c) } else { None })
+            .filter(|e| {
+                let occurrences = e.password.matches(e.ch).count();
+                occurrences >= e.num_left && occurrences <= e.num_right
+            })
             .count()
     }
 
     fn part_two(&self, entries: &Self::Input) -> Self::Second {
         entries
             .into_iter()
-            .filter_map(|c| if c.valid_part_two() { Some(c) } else { None })
+            .filter(|e| {
+                let chars: Vec<char> = e.password.chars().collect();
+                let first = chars.get(e.num_left - 1);
+                let second = chars.get(e.num_right - 1);
+                (first == Some(&e.ch) || second == Some(&e.ch)) && first != second
+            })
             .count()
     }
 }
