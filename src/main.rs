@@ -2,6 +2,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 mod io;
 mod result;
 
@@ -35,7 +36,7 @@ trait PuzzleRunner {
 
     fn run(&self) -> Result<()> {
         let entries = self.input()?;
-        println!("day {} solution", Self::DAY);
+        println!("\nday {} solution", Self::DAY);
         println!("    part one: {}", self.part_one(&entries));
         println!("    part two: {}", self.part_two(&entries));
         Ok(())
@@ -47,6 +48,7 @@ fn main() -> Result<()> {
     day2::Puzzle.run()?;
     day3::Puzzle.run()?;
     day4::Puzzle.run()?;
+    day5::Puzzle.run()?;
 
     Ok(())
 }
