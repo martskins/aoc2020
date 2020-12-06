@@ -3,6 +3,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 mod io;
 mod result;
 
@@ -49,6 +50,7 @@ fn main() -> Result<()> {
     day3::Puzzle.run()?;
     day4::Puzzle.run()?;
     day5::Puzzle.run()?;
+    day6::Puzzle.run()?;
 
     Ok(())
 }

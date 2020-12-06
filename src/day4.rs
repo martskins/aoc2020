@@ -191,6 +191,7 @@ impl PuzzleRunner for Puzzle {
             if line.is_empty() {
                 data.push(parts.join(" "));
                 parts = vec![];
+                continue;
             }
 
             parts.push(line);
