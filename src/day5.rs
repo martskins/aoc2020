@@ -10,17 +10,23 @@ impl Seat {
     fn id(&self) -> u16 {
         self.row * 8 + self.col
     }
+}
 
-    fn from_str(input: &str) -> Self {
-        let mut row: u16 = 0;
-        let mut col: u16 = 0;
-        for (idx, ch) in input.chars().enumerate() {
-            match (idx, ch) {
-                (7..=9, 'R') => col += (2 as u16).pow(2 - (idx - 7) as u32),
-                (0..=6, 'B') => row += (2 as u16).pow((6 - idx) as u32),
-                _ => {}
-            }
-        }
+impl From<&str> for Seat {
+    fn from(s: &str) -> Self {
+        // all entries have 7 for row and 3 for column
+        assert!(s.len() == 10);
+
+        // first 7 characters are the row number, last 3 are the column.
+        let (row, col) = s.split_at(7);
+
+        // row and column are binary numbers, row uses B for 1 and F for 0 and column uses R
+        // for 1 and L for 0.
+        let row = row.replace("B", "1").replace("F", "0");
+        let col = col.replace("R", "1").replace("L", "0");
+
+        let row = u16::from_str_radix(&row, 2).unwrap();
+        let col = u16::from_str_radix(&col, 2).unwrap();
 
         Self { row, col }
     }
@@ -37,7 +43,7 @@ impl PuzzleRunner for Puzzle {
     fn parse_input(&self, filename: &str) -> crate::result::Result<Self::Input> {
         Ok(read_lines(filename)?
             .into_iter()
-            .map(|c| Seat::from_str(&c))
+            .map(|c| Seat::from(c.as_str()))
             .collect())
     }
 
@@ -65,10 +71,10 @@ mod test {
 
     #[test]
     fn test_parse_seat() {
-        assert_eq!(Seat { row: 44, col: 5 }, Seat::from_str("FBFBBFFRLR"));
-        assert_eq!(Seat { row: 70, col: 7 }, Seat::from_str("BFFFBBFRRR"));
-        assert_eq!(Seat { row: 14, col: 7 }, Seat::from_str("FFFBBBFRRR"));
-        assert_eq!(Seat { row: 102, col: 4 }, Seat::from_str("BBFFBBFRLL"));
+        assert_eq!(Seat { row: 44, col: 5 }, Seat::from("FBFBBFFRLR"));
+        assert_eq!(Seat { row: 70, col: 7 }, Seat::from("BFFFBBFRRR"));
+        assert_eq!(Seat { row: 14, col: 7 }, Seat::from("FFFBBBFRRR"));
+        assert_eq!(Seat { row: 102, col: 4 }, Seat::from("BBFFBBFRLL"));
     }
 
     #[test]
