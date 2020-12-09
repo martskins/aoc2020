@@ -6,6 +6,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 mod io;
 mod result;
 
@@ -47,7 +48,15 @@ trait PuzzleRunner {
 }
 
 fn main() -> Result<()> {
+    day1::Puzzle.run()?;
+    day2::Puzzle.run()?;
+    day3::Puzzle.run()?;
+    day4::Puzzle.run()?;
+    day5::Puzzle.run()?;
+    day6::Puzzle.run()?;
+    day7::Puzzle.run()?;
     day8::Puzzle.run()?;
+    day9::Puzzle::new(25).run()?;
 
     Ok(())
 }
